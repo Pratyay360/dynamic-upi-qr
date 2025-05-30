@@ -1,6 +1,7 @@
 {
-  "name": "upi-donate",
-  "version": "1.0.1",
+  "name": "dynamic-upi-qr",
+  "version": "1.0.5",
+  "description": "A dynamic UPI QR code generator with Next.js, Tailwind CSS, and Lottie animations.",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.6.0",
+    "@opennextjs/cloudflare": "^1.1.0",
     "@tailwindcss/postcss": "^4.1.8",
     "@types/node": "^22.15.27",
     "@types/qrcode": "^1.5.5",

@@ -1,4 +1,4 @@
-module.exports = {
+const nextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -9,7 +9,7 @@ module.exports = {
       { hostname: "private-user-images.githubusercontent.com" },
     ],
   },
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
+  allowedDevOrigins: ["localhost", "local.dev", "192.168.0.114"],
 };
+
+export default nextConfig;

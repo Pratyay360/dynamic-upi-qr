@@ -1,52 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+@layer base {
+  html, body {
+    min-height: 100vh;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+  /* Light mode background */
+  body {
+    background-color: rgb(249 250 251);
+    color: rgb(17 24 39);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Dark mode background */
+  .dark body {
+    background-color: rgb(17 24 39);
+    color: rgb(243 244 246);
   }
 }
 
-body {
-  background: #0575E6;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #021B79, #0575E6);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #021B79, #0575E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-.bg1{
-  background: #d9a7c7;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #fffcdc, #d9a7c7);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #fffcdc, #d9a7c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+@layer components {
+  /* Custom scrollbar for aesthetics */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
 
-}
+  /* Light mode scrollbar */
+  ::-webkit-scrollbar {
+    background-color: rgb(243 244 246);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(209 213 219);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(156 163 175);
+  }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.qr-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0.2, 0.2, 0.2, 0.2);
-  margin-top: 10px;
-  margin-bottom: 10px;
-  max-width: 350px;
-  overflow-x: hidden;
-  margin: 5%;
-  height: auto;
-    
+  /* Dark mode scrollbar */
+  .dark ::-webkit-scrollbar {
+    background-color: rgb(31 41 55);
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: rgb(75 85 99);
+    border-radius: 4px;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(107 114 128);
+  }
 }

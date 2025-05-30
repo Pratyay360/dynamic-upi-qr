@@ -1,36 +1,93 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-node_modules
-/.pnp
+# Dependencies
+node_modules/
+.pnp
 .pnp.js
-package-lock.json
-# testing
-/coverage
 
-# next.js
-/.next/
+# Next.js
+.next/
 /out/
+*.tsbuildinfo
+next-env.d.ts
 
-# production
-/build
+# Build outputs
+/build/
+/dist/
 
-# misc
-.DS_Store
-*.pem
+# Testing
+/coverage/
+.nyc_output
 
-# debug
+# Environment variables
+.env*
+!.env.example
+
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
 
-# local env files
-.env*.local
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# vercel
-.vercel
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+*.lock
+# nyc test coverage
+.nyc_output
+*-workspace.yaml
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-*.lock.json
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# Deployment
+.vercel/
+.netlify/
+
+# Misc
+*.tgz
+*.tar.gz
+*.pem
+*.log
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/

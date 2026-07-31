@@ -41,6 +41,35 @@ All commands are run from the root of the project, from a terminal:
 | `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `bun astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
+A lightweight Nodejs package to generate UPI QR codes dynamically . this is the reference documentation to showcase that..
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Quick Start
+
+**Install**
+
+```bash
+npm install upiqrcode
+```
+
+**Usage**
+
+```javascript
+const { generateUPIQR } = require("upiqrcode");
+
+const qr = generateUPIQR({
+  upiid: "username@paytm",
+  name: "John Doe",
+  money: "100",
+  note: "Coffee Payment",
+});
+```
+
+vulns
+
+Most JS-based QR generators are heavy and there dependency trees are crazy if you look into recent npm vulns. so made this a selfcontained rust based wasm . so that it depends on no crazy deps
+
+## Disclaimer
+
+This is an educational project. It isn't affiliated with NPCI, BHIM, or any official UPI provider. Use it for learning and testing purposes only.
+
+**Repo**: [github.com/Pratyay360/dynamic-upi-qr](https://github.com/Pratyay360/dynamic-upi-qr)

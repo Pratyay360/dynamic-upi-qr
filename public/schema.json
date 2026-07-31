@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PaymentTransaction",
+  "type": "object",
+  "properties": {
+    "payeeVPA": {
+      "type": "string",
+      "description": "The Virtual Payment Address of the payee."
+    },
+    "payeeName": {
+      "type": "string",
+      "description": "The name of the payee."
+    },
+    "payeeMerchantCode": {
+      "type": "string",
+      "description": "The unique merchant code for the payee."
+    },
+    "transactionId": {
+      "type": "string",
+      "description": "The unique identifier for the transaction."
+    },
+    "transactionRef": {
+      "type": "string",
+      "description": "The reference number for the transaction."
+    },
+    "transactionNote": {
+      "type": "string",
+      "description": "A note or description associated with the transaction."
+    },
+    "amount": {
+      "type": "string",
+      "description": "The transaction amount."
+    },
+    "minimumAmount": {
+      "type": "string",
+      "description": "The minimum allowable amount for the transaction."
+    },
+    "currency": {
+      "type": "string",
+      "description": "The ISO currency code (e.g., INR, USD)."
+    },
+    "transactionRefUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "The URL for the transaction reference."
+    }
+  },
+  "additionalProperties": false
+}

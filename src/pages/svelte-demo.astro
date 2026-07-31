@@ -1,0 +1,250 @@
+# Svelte Demo
+
+```svelte
+<script>
+  import { onMount } from 'svelte';
+  import { toast } from 'svelte-toaster';
+
+  let loading = false;
+  let qrCode = '';
+  let payeeVPA = '';
+  let amount = '';
+  let note = 'Test transaction';
+  let error = '';
+
+  async function generateQR() {
+    if (!payeeVPA || !amount) {
+      error = 'Please fill all required fields';
+      return;
+    }
+
+    loading = true;
+    error = '';
+
+    try {
+      const result = await upiqrcode({
+        payeeVPA,
+        amount,
+        currency: 'INR',
+        transactionNote: note
+      });
+
+      if (result.qr) {
+        qrCode = result.qr;
+        toast.success('QR Code generated successfully!', {
+          position: 'bottom-right',
+          duration: 3000
+        });
+      }
+    } catch (err) {
+      error = 'Failed to generate QR Code';
+      toast.error('Failed to generate QR Code', {
+        position: 'bottom-right',
+        duration: 3000
+      });
+    } finally {
+      loading = false;
+    }
+  }
+
+  async function downloadQR() {
+    if (!qrCode) return;
+
+    const link = document.createElement('a');
+    link.href = `data:image/png;base64,${qrCode}`;
+    link.download = 'upi-qr-code.png';
+    link.click();
+  }
+
+  onMount(async () => {
+    // Load upiqrcode from CDN
+    if (typeof window !== 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
+      script.onload = () => {
+        window.upiqrcode = window.upiqrcode;
+      };
+      document.head.appendChild(script);
+    }
+  });
+</script>
+
+<style>
+  .qr-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .input-label {
+    min-width: 120px;
+    font-weight: 500;
+    color: #495057;
+  }
+
+  .input-field {
+    padding: 0.5rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .input-field:focus {
+    border-color: #6366f1;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .generate-button {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .generate-button:hover:not(:disabled) {
+    background: #5855eb;
+  }
+
+  .generate-button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .generate-button.loading {
+    animation: pulse 1.5s infinite;
+  }
+
+  .download-button {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .download-button:hover:not(:disabled) {
+    background: #059669;
+  }
+
+  .download-button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .qr-display {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .qr-image {
+    max-width: 200px;
+    padding: 1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
+  .loading-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(99, 102, 241, 0.3);
+    border-radius: 50%;
+    border-top-color: #6366f1;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<div class="qr-container">
+  <h2>Svelte QR Code Generator</h2>
+
+  <div class="form-group">
+    <div class="input-group">
+      <label class="input-label">Payee VPA:</label>
+      <input type="text" class="input-field" bind:value={payeeVPA} placeholder="example@payee" />
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Amount:</label>
+      <input type="text" class="input-field" bind:value={amount} placeholder="100.00" />
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Note:</label>
+      <input type="text" class="input-field" bind:value={note} placeholder="Customer Transaction" />
+    </div>
+
+    {#if error}
+      <p class="error-message">{error}</p>
+    {/if}
+  </div>
+
+  <div class="button-group">
+    <button class="generate-button {loading ? 'loading' : ''}" on:click={generateQR} disabled={loading || !payeeVPA || !amount}>
+      {#if loading}
+        <span class="loading-icon"></span>
+      {/if}
+      Generate QR Code
+    </button>
+
+    <button class="download-button" on:click={downloadQR} disabled={!qrCode}>
+      Download QR Code
+    </button>
+  </div>
+
+  {#if qrCode}
+    <div class="qr-display">
+      <h3>Generated QR Code</h3>
+      <img src="data:image/png;base64,{qrCode}" alt="QR Code" class="qr-image" />
+    </div>
+  {/if}
+</div>
+```

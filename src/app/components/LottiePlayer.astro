@@ -1,0 +1,30 @@
+---
+import { Player } from "@lottiefiles/react-lottie-player";
+---
+interface LottiePlayerProps {
+  src: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  style?: React.CSSProperties;
+  className?: string;
+}
+
+export const LottiePlayer: React.FC<LottiePlayerProps> = ({
+  src,
+  autoplay = true,
+  loop = true,
+  style,
+  className,
+}) => {
+
+
+  if (!mounted || !Player) {
+    return (
+      <div className={`flex items-center justify-center ${className}`} style={style}>
+        <div className="animate-pulse bg-blue-200 dark:bg-blue-800 rounded-full w-full h-full" />
+      </div>
+    );
+  }
+
+  return <Player autoplay={autoplay} loop={loop} src={src} style={style} className={className} />;
+};

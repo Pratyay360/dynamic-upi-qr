@@ -1,21 +1,24 @@
 import { useState, useCallback } from "react";
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const UPI_REGEX = /^[\w.\-_]{2,256}@[a-zA-Z]{2,64}$/;
 
 function validateUPI(value: string): string | undefined {
-  if (!value.trim()) return "UPI ID is required";
-  if (!EMAIL_REGEX.test(value)) return "UPI ID format looks invalid";
+  const trimmed = value.trim();
+  if (!trimmed) return "UPI ID is required";
+  if (trimmed.length < 5) return "UPI ID must be at least 5 characters";
+  if (!UPI_REGEX.test(trimmed)) return "UPI ID format looks invalid (use format like name@handle)";
 }
 
 function validateName(value: string): string | undefined {
-  if (!value.trim()) return "Name is required";
-  if (value.trim().length < 2) return "Name must be at least 2 characters";
+  const trimmed = value.trim();
+  if (!trimmed) return "Name is required";
+  if (trimmed.length < 4) return "Name must be at least 4 characters";
 }
 
 function validateAmount(value: string): string | undefined {
   if (!value) return undefined;
   const num = Number(value);
-  if (Number.isNaN(num) || num < 0) return "Amount must be a positive number";
+  if (Number.isNaN(num) || num <= 0) return "Amount must be a positive number";
 }
 
 function validateNote(value: string): string | undefined {

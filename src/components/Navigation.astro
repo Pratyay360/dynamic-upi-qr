@@ -1,0 +1,94 @@
+---
+const currentPath = Astro.url.pathname;
+const cleanPath = currentPath.endsWith('/') ? currentPath : `${currentPath}/`;
+
+const navItems = [
+  { label: "Overview", href: "/" },
+  { label: "React ", href: "/react" },
+  { label: "Vue ", href: "/vue" },
+  { label: "Svelte", href: "/svelte" },
+  { label: "Plain HTML", href: "/html" },
+  { label: "API Docs", href: "/docs" }
+];
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-stone-200 dark:border-stone-800 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md transition-all duration-300">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-8">
+    <div class="flex items-center gap-3">
+      <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-950">
+        <span class="text-md font-bold">QR</span>
+      </div>
+      <div>
+        <span class="text-sm font-extrabold tracking-tight text-stone-900 dark:text-stone-100">Dynamic UPI</span>
+        <span class="ml-1.5 rounded bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 px-1.5 py-0.5 text-[10px] font-semibold text-stone-600 dark:text-stone-400">upiqrcode 1.5.5</span>
+      </div>
+    </div>
+
+    <nav class="hidden md:flex items-center gap-1">
+      {navItems.map((item) => {
+        const isActive = item.href === "/"
+          ? (cleanPath === "/" || cleanPath === "/index.html/")
+          : cleanPath.includes(item.href);
+        return (
+          <a
+            id={`nav-${item.label.toLowerCase().replace(" ", "-")}`}
+            href={item.href}
+            class={`px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              isActive
+                ? "bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100"
+                : "text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-50 dark:hover:bg-stone-800/50"
+            }`}
+          >
+            {item.label}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Mobile Menu Trigger -->
+    <div class="md:hidden flex items-center">
+      <button
+        id="mobile-menu-btn"
+        class="rounded-lg border border-stone-200 dark:border-stone-800 p-2 text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 transition-all"
+        aria-label="Toggle menu"
+      >
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown -->
+  <div id="mobile-menu" class="hidden md:hidden border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 px-6 py-4 space-y-1">
+    {navItems.map((item) => {
+      const isActive = item.href === "/"
+        ? (cleanPath === "/" || cleanPath === "/index.html/")
+        : cleanPath.includes(item.href);
+      return (
+        <a
+          id={`mobile-nav-${item.label.toLowerCase().replace(" ", "-")}`}
+          href={item.href}
+          class={`block px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            isActive
+              ? "bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100"
+              : "text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-50 dark:hover:bg-stone-800"
+          }`}
+        >
+          {item.label}
+        </a>
+      );
+    })}
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  }
+</script>

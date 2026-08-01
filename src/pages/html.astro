@@ -1,0 +1,310 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+
+const htmlSnippet = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UPI QR Code Generator</title>
+</head>
+<body style="background: #faf9f6; color: #1c1917;">
+  <form id="payForm">
+    <input type="text" id="vpa" placeholder="UPI VPA" required />
+    <input type="text" id="name" placeholder="Payee Name" required />
+    <input type="number" id="amount" placeholder="Amount" />
+    <button type="submit">Generate</button>
+  </form>
+
+  <div id="qrContainer"></div>
+
+  <!-- Load library as ES Module from CDN -->
+  <script type="module">
+    import init, { upiqrcode } from 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
+
+    document.getElementById('payForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // 1. Initialize WASM Runtime
+      await init();
+      
+      // 2. Generate
+      const result = await upiqrcode({
+        payeeVPA: document.getElementById('vpa').value,
+        payeeName: document.getElementById('name').value,
+        amount: document.getElementById('amount').value,
+        currency: 'INR'
+      });
+
+      // 3. Inject raw SVG string into DOM
+      document.getElementById('qrContainer').innerHTML = result.qr;
+    });
+  </script>
+</body>
+</html>`;
+---
+
+<Layout 
+  title="Plain HTML Integration - UPI QR Code Demos"
+  description="Learn how to generate dynamic UPI QR codes in plain HTML and vanilla JavaScript using upiqrcode.js via CDN loading."
+>
+  <div class="min-h-screen bg-white dark:bg-stone-950 text-stone-850 dark:text-stone-200 flex flex-col">
+    <Navigation />
+    
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 sm:px-8 py-12">
+      <div class="mb-10 text-center md:text-left">
+        <h1 class="text-3xl font-extrabold tracking-tight mb-2 text-stone-900 dark:text-stone-50">
+          Plain HTML Integration
+        </h1>
+        <p class="text-sm text-stone-500 dark:text-stone-400 max-w-2xl">
+          Learn how to integrate the Rust-to-WebAssembly library using plain HTML and vanilla JavaScript without any UI framework. The example utilizes native browser ES modules to load and run the compiler.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <!-- Interactive Demo -->
+        <div class="w-full max-w-xl mx-auto p-8 rounded-2xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-850 dark:text-stone-100 shadow-sm transition-all duration-300">
+          <div class="flex items-center gap-3 mb-6">
+            <h3 class="text-md font-bold tracking-tight text-stone-900 dark:text-stone-100 uppercase font-sans">Plain HTML Demo</h3>
+          </div>
+
+          <form id="html-demo-form" class="space-y-4">
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+                Payee UPI VPA <span class="text-stone-400 dark:text-stone-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="html-vpa"
+                required
+                placeholder="e.g. success@upi"
+                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-stone-955 border border-stone-300 dark:border-stone-800 text-stone-955 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500/10 focus:border-stone-500 dark:focus:border-stone-700 transition-all font-sans text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+                Payee Name <span class="text-stone-400 dark:text-stone-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="html-name"
+                required
+                placeholder="e.g. John Doe"
+                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-stone-955 border border-stone-300 dark:border-stone-800 text-stone-955 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500/10 focus:border-stone-500 dark:focus:border-stone-700 transition-all font-sans text-sm"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+                  Amount (INR) <span class="text-stone-400 dark:text-stone-500">(Optional)</span>
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  id="html-amount"
+                  placeholder="e.g. 150.00"
+                  class="w-full px-4 py-3 rounded-lg bg-white dark:bg-stone-955 border border-stone-300 dark:border-stone-800 text-stone-955 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500/10 focus:border-stone-500 dark:focus:border-stone-700 transition-all font-sans text-sm"
+                />
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+                  Note
+                </label>
+                <input
+                  type="text"
+                  id="html-note"
+                  placeholder="e.g. Payment"
+                  class="w-full px-4 py-3 rounded-lg bg-white dark:bg-stone-955 border border-stone-300 dark:border-stone-800 text-stone-955 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500/10 focus:border-stone-500 dark:focus:border-stone-700 transition-all font-sans text-sm"
+                />
+              </div>
+            </div>
+
+            <div id="html-error" class="hidden p-4 rounded-lg bg-amber-50 dark:bg-stone-955 border border-amber-200 dark:border-stone-800/80 text-amber-900 dark:text-stone-300 text-xs">
+            </div>
+
+            <button
+              type="submit"
+              id="html-submit"
+              class="w-full py-3.5 rounded-lg bg-stone-900 hover:bg-stone-800 dark:bg-stone-100 dark:hover:bg-stone-200 text-white dark:text-stone-955 font-bold tracking-wide active:scale-[0.99] transition-all text-sm"
+            >
+              Generate UPI QR Code
+            </button>
+          </form>
+
+          <div id="html-result" class="hidden mt-8 pt-8 border-t border-stone-200 dark:border-stone-800 flex flex-col items-center">
+            <div id="html-qr-container" class="p-4 rounded-xl bg-white text-neutral-900 border border-stone-200 flex justify-center items-center shadow-sm mb-6 html-qr-svg-wrapper">
+            </div>
+
+            <div class="w-full space-y-3">
+              <div class="flex items-center gap-2 p-3 bg-stone-100 dark:bg-stone-955 border border-stone-200 dark:border-stone-800 rounded-lg">
+                <span id="html-intent-text" class="text-xs font-mono text-stone-600 dark:text-stone-400 truncate flex-1 block select-all">
+                </span>
+                <button
+                  id="html-copy-btn"
+                  class="px-3 py-1.5 rounded bg-white hover:bg-stone-50 dark:bg-stone-900 dark:hover:bg-stone-800 border border-stone-300 dark:border-stone-700 text-xs font-semibold text-stone-700 dark:text-stone-300 active:scale-[0.97] transition-all whitespace-nowrap"
+                >
+                  Copy
+                </button>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  id="html-download-btn"
+                  class="py-3 px-4 rounded-lg border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-xs font-semibold text-stone-700 dark:text-stone-300 active:scale-[0.98] transition-all"
+                >
+                  Download SVG
+                </button>
+                <a
+                  id="html-open-btn"
+                  href="#"
+                  class="py-3 px-4 rounded-lg bg-stone-900 hover:bg-stone-800 dark:bg-stone-100 dark:hover:bg-stone-200 text-xs font-semibold text-white dark:text-stone-955 text-center active:scale-[0.98] transition-all"
+                >
+                  Open in App
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Code Snippet Display -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">HTML Code Implementation</h2>
+          <div class="rounded-xl border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 overflow-hidden shadow-sm">
+            <div class="flex items-center justify-between px-4 py-3 bg-stone-100 dark:bg-stone-955 border-b border-stone-200 dark:border-stone-800 text-[11px] text-stone-600 dark:text-stone-400 font-mono">
+              <span>index.html</span>
+              <span class="text-stone-850 dark:text-stone-200 font-bold uppercase">HTML &amp; JS</span>
+            </div>
+            <pre class="p-6 overflow-x-auto text-[11px] font-mono text-stone-700 dark:text-stone-300 leading-relaxed bg-stone-955"><code>{htmlSnippet}</code></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="border-t border-stone-200 dark:border-stone-900 py-6 text-center text-xs text-stone-500 dark:text-stone-600 bg-white dark:bg-stone-955">
+      <p>&copy; 2026 Dynamic UPI.</p>
+    </footer>
+  </div>
+</Layout>
+
+<script>
+  // Simple vanilla JS logic matching Svelte/React but using native browser APIs
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('html-demo-form') as HTMLFormElement | null;
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const vpaInput = document.getElementById('html-vpa') as HTMLInputElement;
+      const nameInput = document.getElementById('html-name') as HTMLInputElement;
+      const amountInput = document.getElementById('html-amount') as HTMLInputElement;
+      const noteInput = document.getElementById('html-note') as HTMLInputElement;
+      const submitBtn = document.getElementById('html-submit') as HTMLButtonElement;
+      const errorDiv = document.getElementById('html-error') as HTMLDivElement;
+      const resultDiv = document.getElementById('html-result') as HTMLDivElement;
+      const qrContainer = document.getElementById('html-qr-container') as HTMLDivElement;
+      const intentText = document.getElementById('html-intent-text') as HTMLSpanElement;
+      const copyBtn = document.getElementById('html-copy-btn') as HTMLButtonElement;
+      const downloadBtn = document.getElementById('html-download-btn') as HTMLButtonElement;
+      const openBtn = document.getElementById('html-open-btn') as HTMLAnchorElement;
+
+      errorDiv.classList.add('hidden');
+      errorDiv.textContent = '';
+
+      const vpa = vpaInput.value.trim();
+      const name = nameInput.value.trim();
+      const amount = amountInput.value.trim();
+      const note = noteInput.value.trim() || 'Payment';
+
+      if (!vpa || vpa.length < 5 || !vpa.includes('@')) {
+        errorDiv.textContent = 'UPI VPA is required and must be a valid handle (e.g. name@bank, min 5 chars)';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      if (!name || name.length < 4) {
+        errorDiv.textContent = 'Payee Name is required and must be at least 4 characters';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Initializing WASM...';
+
+      try {
+        const url = 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
+        const mod = await import(
+          /* @vite-ignore */ url
+        );
+        await mod.default(); // Init WASM
+
+        const params: any = {
+          payeeVPA: vpa,
+          payeeName: name,
+          currency: 'INR',
+          transactionNote: note
+        };
+
+        if (amount) {
+          params.amount = parseFloat(amount).toFixed(2);
+        }
+
+        const res = await mod.upiqrcode(params);
+
+        if (res && res.qr) {
+          qrContainer.innerHTML = res.qr;
+          
+          // Style SVG width/height automatically
+          const svgEl = qrContainer.querySelector('svg');
+          if (svgEl) {
+            svgEl.setAttribute('width', '200');
+            svgEl.setAttribute('height', '200');
+          }
+
+          intentText.textContent = res.intent;
+          openBtn.href = res.intent;
+
+          // Wire copy button
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(res.intent);
+            copyBtn.textContent = 'Copied! ✓';
+            setTimeout(() => copyBtn.textContent = 'Copy', 2000);
+          };
+
+          // Wire download button
+          downloadBtn.onclick = () => {
+            const blob = new Blob([res.qr], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `upi-qr-${vpa.replace('@', '-')}.svg`;
+            a.click();
+            URL.revokeObjectURL(url);
+          };
+
+          resultDiv.classList.remove('hidden');
+        } else {
+          errorDiv.textContent = 'Failed to generate QR code.';
+          errorDiv.classList.remove('hidden');
+        }
+      } catch (err: any) {
+        console.error(err);
+        errorDiv.textContent = err.message || 'Error occurred during generation.';
+        errorDiv.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Generate UPI QR Code';
+      }
+    });
+  });
+</script>
+
+<style>
+  :global(.html-qr-svg-wrapper svg) {
+    width: 200px !important;
+    height: 200px !important;
+    display: block;
+  }
+</style>

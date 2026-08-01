@@ -1,3 +1,8 @@
+---
+title: "Plain HTML Demo"
+description: "Using upiqrcode with Plain HTML"
+---
+
 # Plain HTML Demo
 
 This example demonstrates using upiqrcode in plain HTML via CDN.

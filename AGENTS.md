@@ -42,5 +42,5 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 - [upiqrcode](https://gitmcp.io/Pratyay360/upiqrcode)
 - [upiqrcode](https://zread.ai/Pratyay360/upiqrcode)
 
-i want a app to first demonstrate my package (Pratyay360/upiqrcode) and show examples for different framework using the island architecture
+i want a app to first demonstrate my package (Pratyay360/upiqrcode) and show examples for different framework using the  architecture
 https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js

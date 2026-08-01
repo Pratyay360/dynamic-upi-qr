@@ -11,7 +11,7 @@ import svelte from "@astrojs/svelte";
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [/** @type {any} */ (tailwindcss())],
   },
 
   integrations: [
@@ -24,12 +24,20 @@ export default defineConfig({
         },
       },
       sidebar: [
-        { "items" : "/docs"}
-        ]},
+        {
+          label: "Framework Demos",
+          items: [
+            { label: "Overview", link: "/" },
+            { label: "React", link: "/react" },
+            { label: "Vue", link: "/vue" },
+            { label: "Svelte", link: "/svelte" },
+            { label: "Plain HTML", link: "/html" },
+          ],
+        },
       ],
     }),
     react(),
     vue(),
     svelte(),
-
+  ],
 });

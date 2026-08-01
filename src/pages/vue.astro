@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import VueUPIQRCode from '../components/VueUPIQRCode.vue';
+
+const vueCode = `<template>
+  <form @submit.prevent="handleGenerate">...</form>
+  <div v-if="result" v-html="result.qr" class="qr-svg-container" />
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+
+const vpa = ref('');
+const name = ref('');
+const amount = ref('');
+const result = ref(null);
+const loading = ref(false);
+const upiqrcodeLib = ref(null);
+
+onMounted(async () => {
+  try {
+    const mod = await import('https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js');
+    await mod.default(); // Initialize WASM
+    upiqrcodeLib.value = mod;
+  } catch (err) {
+    console.error('Failed to load upiqrcode library', err);
+  }
+});
+
+const handleGenerate = async () => {
+  if (!vpa.value || !name.value) return;
+  loading.value = true;
+  try {
+    const params = {
+      payeeVPA: vpa.value,
+      payeeName: name.value,
+      currency: 'INR',
+    };
+    if (amount.value) params.amount = parseFloat(amount.value).toFixed(2);
+    
+    result.value = await upiqrcodeLib.value.upiqrcode(params);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    loading.value = false;
+  }
+};
+</script>
+
+<style>
+.qr-svg-container :deep(svg) {
+  width: 200px !important;
+  height: 200px !important;
+}
+</style>`;
+---
+
+<Layout 
+  title="Vue Integration - UPI QR Code Demos"
+  description="Learn how to generate dynamic UPI QR codes in Vue 3 using upiqrcode.js via CDN loading of WebAssembly."
+>
+  <div class="min-h-screen bg-white dark:bg-stone-950 text-stone-850 dark:text-stone-200 flex flex-col">
+    <Navigation />
+    
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 sm:px-8 py-12">
+      <div class="mb-10 text-center md:text-left">
+        <h1 class="text-3xl font-extrabold tracking-tight mb-2 text-stone-900 dark:text-stone-50">
+          Vue Island Integration
+        </h1>
+        <p class="text-sm text-stone-500 dark:text-stone-400 max-w-2xl">
+          A dynamic Vue 3 component loaded as an Astro client island. The component uses Vue's Composition API to dynamically download the WebAssembly binaries from CDN.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <!-- Interactive Demo Island -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">Interactive Island</h2>
+          <VueUPIQRCode client:load />
+        </div>
+
+        <!-- Code Snippet Display -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">Vue Code Implementation</h2>
+          <div class="rounded-xl border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 overflow-hidden shadow-sm">
+            <div class="flex items-center justify-between px-4 py-3 bg-stone-100 dark:bg-stone-955 border-b border-stone-200 dark:border-stone-800 text-[11px] text-stone-600 dark:text-stone-400 font-mono">
+              <span>VueUPIQRCode.vue</span>
+              <span class="text-stone-800 dark:text-stone-200 font-bold uppercase">Vue 3</span>
+            </div>
+            <pre class="p-6 overflow-x-auto text-[11px] font-mono text-stone-700 dark:text-stone-300 leading-relaxed bg-stone-955"><code>{vueCode}</code></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="border-t border-stone-200 dark:border-stone-900 py-6 text-center text-xs text-stone-500 dark:text-stone-600 bg-white dark:bg-stone-950">
+      <p>&copy; 2026 Dynamic UPI.</p>
+    </footer>
+  </div>
+</Layout>

@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import SvelteUPIQRCode from '../components/SvelteUPIQRCode.svelte';
+
+const svelteCode = `<script>
+  import { onMount } from 'svelte';
+
+  let vpa = '';
+  let name = '';
+  let amount = '';
+  let result = null;
+  let loading = false;
+  let upiqrcodeLib = null;
+
+  onMount(async () => {
+    try {
+      const mod = await import('https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js');
+      await mod.default(); // Initialize WASM
+      upiqrcodeLib = mod;
+    } catch (err) {
+      console.error('Failed to load upiqrcode library', err);
+    }
+  });
+
+  async function handleGenerate(e) {
+    e.preventDefault();
+    if (!vpa || !name) return;
+    loading = true;
+    try {
+      const params = {
+        payeeVPA: vpa,
+        payeeName: name,
+        currency: 'INR',
+      };
+      if (amount) params.amount = parseFloat(amount).toFixed(2);
+
+      result = await upiqrcodeLib.upiqrcode(params);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      loading = false;
+    }
+  }
+</script>
+
+<form on:submit={handleGenerate}>...</form>
+
+<!-- Render raw SVG string using Svelte {@html ...} -->
+{#if result}
+  <div class="qr-svg-container">
+    {@html result.qr}
+  </div>
+{/if}
+
+<style>
+  :global(.qr-svg-container svg) {
+    width: 200px !important;
+    height: 200px !important;
+  }
+</style>`;
+---
+
+<Layout 
+  title="Svelte Integration - UPI QR Code Demos"
+  description="Learn how to generate dynamic UPI QR codes in Svelte using upiqrcode.js via CDN loading of WebAssembly."
+>
+  <div class="min-h-screen bg-white dark:bg-stone-950 text-stone-850 dark:text-stone-200 flex flex-col">
+    <Navigation />
+    
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 sm:px-8 py-12">
+      <div class="mb-10 text-center md:text-left">
+        <h1 class="text-3xl font-extrabold tracking-tight mb-2 text-stone-900 dark:text-stone-50">
+          Svelte Island Integration
+        </h1>
+        <p class="text-sm text-stone-500 dark:text-stone-400 max-w-2xl">
+          A dynamic Svelte component loaded as an Astro client island. The Svelte template uses the native <code>&lcub;@html ...&rcub;</code> syntax to inject the SVG string compiled in-browser by the WebAssembly runtime.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <!-- Interactive Demo Island -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">Interactive Island</h2>
+          <SvelteUPIQRCode client:load />
+        </div>
+
+        <!-- Code Snippet Display -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">Svelte Code Implementation</h2>
+          <div class="rounded-xl border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 overflow-hidden shadow-sm">
+            <div class="flex items-center justify-between px-4 py-3 bg-stone-100 dark:bg-stone-955 border-b border-stone-200 dark:border-stone-800 text-[11px] text-stone-600 dark:text-stone-400 font-mono">
+              <span>SvelteUPIQRCode.svelte</span>
+              <span class="text-stone-800 dark:text-stone-200 font-bold uppercase">Svelte</span>
+            </div>
+            <pre class="p-6 overflow-x-auto text-[11px] font-mono text-stone-700 dark:text-stone-300 leading-relaxed bg-stone-955"><code>{svelteCode}</code></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="border-t border-stone-200 dark:border-stone-900 py-6 text-center text-xs text-stone-500 dark:text-stone-600 bg-white dark:bg-stone-950">
+      <p>&copy; 2026 Dynamic UPI.</p>
+    </footer>
+  </div>
+</Layout>

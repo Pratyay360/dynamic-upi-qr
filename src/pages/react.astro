@@ -1,0 +1,109 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import ReactUPIQRCode from '../components/ReactUPIQRCode';
+
+const reactCode = `import React, { useState, useEffect, useRef } from 'react';
+
+export default function ReactUPIQRCode() {
+  const [vpa, setVpa] = useState('');
+  const [name, setName] = useState('');
+  const [amount, setAmount] = useState('');
+  const [note, setNote] = useState('Payment');
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const upiqrcodeRef = useRef(null);
+
+  // Load the WASM library from CDN on mount
+  useEffect(() => {
+    const initLib = async () => {
+      try {
+        const url = 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
+        const mod = await import(url);
+        await mod.default(); // Initialize WebAssembly
+        upiqrcodeRef.current = mod;
+      } catch (err) {
+        setError('Failed to initialize UPI QR engine.');
+      }
+    };
+    initLib();
+  }, []);
+
+  const handleGenerate = async (e) => {
+    e.preventDefault();
+    if (!vpa || !name) return;
+
+    setLoading(true);
+    try {
+      const params = {
+        payeeVPA: vpa,
+        payeeName: name,
+        currency: 'INR',
+        transactionNote: note,
+      };
+      if (amount) params.amount = parseFloat(amount).toFixed(2);
+
+      const res = await upiqrcodeRef.current.upiqrcode(params);
+      setResult(res); // returns { qr: SVG_STRING, intent: INTENT_URL }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleGenerate}>...</form>
+      {result && (
+        <div dangerouslySetInnerHTML={{ __html: result.qr }} />
+      )}
+    </div>
+  );
+}`;
+---
+
+<Layout 
+  title="React Integration - UPI QR Code Demos"
+  description="Learn how to generate dynamic UPI QR codes in React using upiqrcode.js via CDN loading of WebAssembly."
+>
+  <div class="min-h-screen bg-white dark:bg-stone-950 text-stone-850 dark:text-stone-200 flex flex-col">
+    <Navigation />
+    
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 sm:px-8 py-12">
+      <div class="mb-10 text-center md:text-left">
+        <h1 class="text-3xl font-extrabold tracking-tight mb-2 text-stone-900 dark:text-stone-50">
+          React Island Integration
+        </h1>
+        <p class="text-sm text-stone-500 dark:text-stone-400 max-w-2xl">
+          A dynamic React component loaded as an Astro client island. Below, the component dynamically fetches the WebAssembly library from the CDN on mount and compiles UPI vectors.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <!-- Interactive Demo Island -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">Interactive Island</h2>
+          <ReactUPIQRCode client:load />
+        </div>
+
+        <!-- Code Snippet Display -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">React Code Implementation</h2>
+          <div class="rounded-xl border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 overflow-hidden shadow-sm">
+            <div class="flex items-center justify-between px-4 py-3 bg-stone-100 dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 text-[11px] text-stone-600 dark:text-stone-400 font-mono">
+              <span>ReactUPIQRCode.tsx</span>
+              <span class="text-stone-800 dark:text-stone-200 font-bold uppercase">React</span>
+            </div>
+            <pre class="p-6 overflow-x-auto text-[11px] font-mono text-stone-700 dark:text-stone-300 leading-relaxed bg-stone-950"><code>{reactCode}</code></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="border-t border-stone-200 dark:border-stone-900 py-6 text-center text-xs text-stone-500 dark:text-stone-600 bg-white dark:bg-stone-950">
+      <p>&copy; 2026 Dynamic UPI.</p>
+    </footer>
+  </div>
+</Layout>

@@ -105,7 +105,7 @@
 
 <div class="w-full max-w-xl mx-auto my-6 p-8 rounded-2xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-100 shadow-sm transition-all duration-300">
   <div class="flex items-center gap-3 mb-6">
-    <h3 class="text-md font-bold tracking-tight text-stone-900 dark:text-stone-100 uppercase font-sans">Svelte Component Island</h3>
+    <h3 class="text-md font-bold tracking-tight text-stone-900 dark:text-stone-100 uppercase font-sans">Svelte Component Example</h3>
   </div>
 
   <form on:submit={handleGenerate} class="space-y-4">

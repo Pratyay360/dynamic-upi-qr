@@ -1,0 +1,238 @@
+---
+// PlainHTMLUPIQRCode.astro
+// A self-contained Astro component that demonstrates upiqrcode in plain HTML
+// using vanilla JavaScript to dynamically import the CDN WebAssembly module.
+---
+
+<div class="w-full max-w-xl mx-auto my-6 p-8 rounded-2xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-100 shadow-sm transition-all duration-300">
+  <div class="flex items-center gap-3 mb-6">
+    <h3 class="text-md font-bold tracking-tight text-stone-900 dark:text-stone-100 uppercase font-sans">
+      Plain HTML Demo
+    </h3>
+  </div>
+
+  <form id="plain-html-form" class="space-y-4">
+    <div>
+      <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+        Payee UPI VPA <span class="text-stone-400 dark:text-stone-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="plain-html-vpa"
+        required
+        placeholder="e.g. success@upi"
+        class="w-full px-4 py-3 rounded-lg bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-800 text-stone-950 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500/10 focus:border-stone-500 dark:focus:border-stone-700 transition-all font-sans text-sm"
+      />
+    </div>
+
+    <div>
+      <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+        Payee Name <span class="text-stone-400 dark:text-stone-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="plain-html-name"
+        required
+        placeholder="e.g. John Doe"
+        class="w-full px-4 py-3 rounded-lg bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-800 text-stone-950 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500/10 focus:border-stone-500 dark:focus:border-stone-700 transition-all font-sans text-sm"
+      />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+          Amount (INR) <span class="text-stone-400 dark:text-stone-500">(Optional)</span>
+        </label>
+        <input
+          type="number"
+          step="0.01"
+          id="plain-html-amount"
+          placeholder="e.g. 150.00"
+          class="w-full px-4 py-3 rounded-lg bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-800 text-stone-955 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500/10 focus:border-stone-500 dark:focus:border-stone-700 transition-all font-sans text-sm"
+        />
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+          Note
+        </label>
+        <input
+          type="text"
+          id="plain-html-note"
+          placeholder="e.g. Payment"
+          class="w-full px-4 py-3 rounded-lg bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-800 text-stone-955 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-stone-500/10 focus:border-stone-500 dark:focus:border-stone-700 transition-all font-sans text-sm"
+        />
+      </div>
+    </div>
+
+    <div id="plain-html-error" class="hidden p-4 rounded-lg bg-amber-50 dark:bg-stone-955 border border-amber-200 dark:border-stone-800/80 text-amber-900 dark:text-stone-300 text-xs">
+    </div>
+
+    <button
+      type="submit"
+      id="plain-html-submit"
+      class="w-full py-3.5 rounded-lg bg-stone-900 hover:bg-stone-800 dark:bg-stone-100 dark:hover:bg-stone-200 text-white dark:text-stone-950 font-bold tracking-wide active:scale-[0.99] transition-all text-sm"
+    >
+      Generate UPI QR Code
+    </button>
+  </form>
+
+  <div id="plain-html-result" class="hidden mt-8 pt-8 border-t border-stone-200 dark:border-stone-800 flex flex-col items-center">
+    <div id="plain-html-qr-container" class="p-4 rounded-xl bg-white text-neutral-900 border border-stone-200 flex justify-center items-center shadow-sm mb-6 plain-html-qr-svg-wrapper">
+    </div>
+
+    <div class="w-full space-y-3">
+      <div class="flex items-center gap-2 p-3 bg-stone-100 dark:bg-stone-955 border border-stone-200 dark:border-stone-800 rounded-lg">
+        <span id="plain-html-intent-text" class="text-xs font-mono text-stone-600 dark:text-stone-400 truncate flex-1 block select-all">
+        </span>
+        <button
+          id="plain-html-copy-btn"
+          class="px-3 py-1.5 rounded bg-white hover:bg-stone-50 dark:bg-stone-900 dark:hover:bg-stone-800 border border-stone-300 dark:border-stone-700 text-xs font-semibold text-stone-700 dark:text-stone-300 active:scale-[0.97] transition-all whitespace-nowrap"
+        >
+          Copy
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <button
+          id="plain-html-download-btn"
+          class="py-3 px-4 rounded-lg border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-xs font-semibold text-stone-700 dark:text-stone-300 active:scale-[0.98] transition-all"
+        >
+          Download SVG
+        </button>
+        <a
+          id="plain-html-open-btn"
+          href="#"
+          class="py-3 px-4 rounded-lg bg-stone-900 hover:bg-stone-800 dark:bg-stone-100 dark:hover:bg-stone-200 text-xs font-semibold text-white dark:text-stone-955 text-center active:scale-[0.98] transition-all"
+        >
+          Open in App
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script client:load is:inline>
+  // Vanilla JS logic for the plain HTML demo - loads upiqrcode from CDN
+  (function () {
+    var form = document.getElementById('plain-html-form');
+    if (!form) return;
+
+    var submitBtn = document.getElementById('plain-html-submit');
+    var errorDiv = document.getElementById('plain-html-error');
+    var resultDiv = document.getElementById('plain-html-result');
+    var qrContainer = document.getElementById('plain-html-qr-container');
+    var intentText = document.getElementById('plain-html-intent-text');
+    var copyBtn = document.getElementById('plain-html-copy-btn');
+    var downloadBtn = document.getElementById('plain-html-download-btn');
+    var openBtn = document.getElementById('plain-html-open-btn');
+
+    var vpaInput = document.getElementById('plain-html-vpa');
+    var nameInput = document.getElementById('plain-html-name');
+    var amountInput = document.getElementById('plain-html-amount');
+    var noteInput = document.getElementById('plain-html-note');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      errorDiv.classList.add('hidden');
+      errorDiv.textContent = '';
+
+      var vpa = vpaInput.value.trim();
+      var name = nameInput.value.trim();
+      var amount = amountInput.value.trim();
+      var note = noteInput.value.trim() || 'Payment';
+
+      if (!vpa || vpa.length < 5 || !vpa.includes('@')) {
+        errorDiv.textContent = 'UPI VPA is required and must be a valid handle (e.g. name@bank, min 5 chars)';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      if (!name || name.length < 4) {
+        errorDiv.textContent = 'Payee Name is required and must be at least 4 characters';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+
+      var qty = parseFloat(amount);
+      if (amount && (isNaN(qty) || qty <= 0)) {
+        errorDiv.textContent = 'Amount must be a valid positive number';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Initializing WASM...';
+
+      try {
+        var url = 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
+        var mod = await import(/* @vite-ignore */ url);
+        await mod.default(); // Initialize WASM
+
+        var params = {
+          payeeVPA: vpa,
+          payeeName: name,
+          currency: 'INR',
+          transactionNote: note
+        };
+
+        if (amount) {
+          params.amount = qty.toFixed(2);
+        }
+
+        var res = await mod.upiqrcode(params);
+
+        if (res && res.qr) {
+          qrContainer.innerHTML = res.qr;
+
+          var svgEl = qrContainer.querySelector('svg');
+          if (svgEl) {
+            svgEl.setAttribute('width', '200');
+            svgEl.setAttribute('height', '200');
+          }
+
+          intentText.textContent = res.intent;
+          openBtn.href = res.intent;
+
+          // Wire copy button
+          copyBtn.onclick = function () {
+            navigator.clipboard.writeText(res.intent);
+            copyBtn.textContent = 'Copied! ✓';
+            setTimeout(function () { copyBtn.textContent = 'Copy'; }, 2000);
+          };
+
+          // Wire download button
+          downloadBtn.onclick = function () {
+            var blob = new Blob([res.qr], { type: 'image/svg+xml' });
+            var linkUrl = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = linkUrl;
+            a.download = 'upi-qr-' + vpa.replace('@', '-') + '.svg';
+            a.click();
+            URL.revokeObjectURL(linkUrl);
+          };
+
+          resultDiv.classList.remove('hidden');
+        } else {
+          errorDiv.textContent = 'Failed to generate QR code.';
+          errorDiv.classList.remove('hidden');
+        }
+      } catch (err) {
+        console.error(err);
+        errorDiv.textContent = (err && err.message) || 'Error occurred during generation.';
+        errorDiv.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Generate UPI QR Code';
+      }
+    });
+  })();
+</script>
+
+<style>
+  :global(.plain-html-qr-svg-wrapper svg) {
+    width: 200px !important;
+    height: 200px !important;
+    display: block;
+  }
+</style>

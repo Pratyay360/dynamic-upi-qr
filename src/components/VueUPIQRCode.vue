@@ -4,7 +4,7 @@
   >
     <div class="flex items-center gap-3 mb-6">
       <h3 class="text-md font-bold tracking-tight text-stone-900 dark:text-stone-100 uppercase">
-        Vue Component Island
+        Vue Component Example
       </h3>
     </div>
 

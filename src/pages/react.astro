@@ -21,7 +21,7 @@ export default function ReactUPIQRCode() {
       try {
         const url = 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
         const mod = await import(url);
-        await mod.default(); // Initialize WebAssembly
+        await mod.default(); 
         upiqrcodeRef.current = mod;
       } catch (err) {
         setError('Failed to initialize UPI QR engine.');
@@ -66,7 +66,7 @@ export default function ReactUPIQRCode() {
 
 <Layout 
   title="React Integration - UPI QR Code Demos"
-  description="Learn how to generate dynamic UPI QR codes in React using upiqrcode.js via CDN loading of WebAssembly."
+  description="Learn how to generate dynamic UPI QR codes in React using upiqrcode.js via cdn"
 >
   <div class="min-h-screen bg-white dark:bg-stone-950 text-stone-850 dark:text-stone-200 flex flex-col">
     <Navigation />
@@ -74,17 +74,16 @@ export default function ReactUPIQRCode() {
     <main class="flex-grow max-w-7xl w-full mx-auto px-6 sm:px-8 py-12">
       <div class="mb-10 text-center md:text-left">
         <h1 class="text-3xl font-extrabold tracking-tight mb-2 text-stone-900 dark:text-stone-50">
-          React Island Integration
+          React Example Integration
         </h1>
         <p class="text-sm text-stone-500 dark:text-stone-400 max-w-2xl">
-          A dynamic React component loaded as an Astro client island. Below, the component dynamically fetches the WebAssembly library from the CDN on mount and compiles UPI vectors.
+            How to use in react
         </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-        <!-- Interactive Demo Island -->
         <div class="space-y-4">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">Interactive Island</h2>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">Interactive Example </h2>
           <ReactUPIQRCode client:load />
         </div>
 
@@ -102,8 +101,6 @@ export default function ReactUPIQRCode() {
       </div>
     </main>
     
-    <footer class="border-t border-stone-200 dark:border-stone-900 py-6 text-center text-xs text-stone-500 dark:text-stone-600 bg-white dark:bg-stone-950">
-      <p>&copy; 2026 Dynamic UPI.</p>
-    </footer>
+ 
   </div>
 </Layout>

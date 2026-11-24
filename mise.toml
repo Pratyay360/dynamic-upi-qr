@@ -1,5 +1,17 @@
 [tools]
+aube = "latest"
 biome = "latest"
-node = "latest"
+bun = "latest"
+node = "24"
+"npm:netlify-cli" = "latest"
+"npm:parcel" = "latest"
 nub = "latest"
 vp = "latest"
+
+[tasks]
+build = "bun run build"
+lint = "biome check"
+build-parcel = "bun run build:parcel"
+
+[tasks.deploy]
+run = ["mise trust", "mise install", "mise run build-parcel"]

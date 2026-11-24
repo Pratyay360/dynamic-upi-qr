@@ -1,46 +1,48 @@
 {
-  "name": "dynamic-upi",
-  "version": "0.0.1",
-  "type": "module",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/check": "^0.9.12",
-    "@astrojs/react": "^6.0.6",
-    "@astrojs/starlight": "^0.41.11",
-    "@astrojs/svelte": "^9.1.6",
-    "@astrojs/vue": "^7.1.6",
-    "@lottiefiles/react-lottie-player": "^3.6.0",
-    "@tailwindcss/vite": "^4.3.5",
-    "astro": "^7.4.13",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "starlight": "^0.3.9",
-    "svelte": "^5.59.1",
-    "tailwindcss": "^4.3.5",
-    "typescript": "^7.0.2",
-    "upiqrcode": "^1.5.9",
-    "vue": "^3.5.46",
-    "zod": "^4.6.7"
-  },
-  "devDependencies": {
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "vite": "npm:@voidzero-dev/vite-plus-core@8.3.8000",
-    "vite-plus": "1.7.0"
-  },
-  "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@8.3.8000"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "nub",
-      "version": "^0.11.1",
-      "onFail": "ignore"
-    }
-  }
+	"name": "dynamic-upi",
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"build:parcel": "cd dist && parcel build \"**/*.html\" --dist-dir ."
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.9.12",
+		"@astrojs/react": "^6.0.6",
+		"@astrojs/starlight": "^0.41.11",
+		"@astrojs/svelte": "^9.1.6",
+		"@astrojs/vue": "^7.1.6",
+		"@lottiefiles/react-lottie-player": "^3.6.0",
+		"@tailwindcss/vite": "^4.3.5",
+		"astro": "^7.4.13",
+		"react": "^19.3.1",
+		"react-dom": "^19.3.1",
+		"starlight": "^0.3.9",
+		"svelte": "^5.59.1",
+		"tailwindcss": "^4.3.5",
+		"typescript": "^7.0.2",
+		"upiqrcode": "^1.5.9",
+		"vue": "^3.5.46",
+		"zod": "^4.6.7"
+	},
+	"devDependencies": {
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"vite": "npm:@voidzero-dev/vite-plus-core@8.3.8000",
+		"vite-plus": "1.7.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@8.3.8000"
+	},
+	"devEngines": {
+		"packageManager": {
+			"name": "bun",
+			"version": "^1.4.5",
+			"onFail": "warn"
+		}
+	},
+	"packageManager": "bun@1.4.5+sha512.4963809dc7e1c22a88c9a677bb2b940ffea8f1a59b1bc42d53a482865cf8bba53f0bcf604d969f2c30a66d4bf2363c7e71cc4b2c757e952b16a84d4e04df1b07"
 }

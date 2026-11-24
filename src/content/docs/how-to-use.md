@@ -1,4 +1,5 @@
 ---
+
 title: "How to Use"
 description: "Step-by-step guide to generating UPI QR codes with Dynamic UPI."
 sidebar: { order: 2 }
@@ -54,11 +55,11 @@ npm install upiqrcode
 const { upiqrcode } = require("upiqrcode");
 
 const result = await upiqrcode({
-  payeeVPA: "success@upi",
-  payeeName: "John Doe",
-  amount: "150.00",
-  currency: "INR",
-  transactionNote: "Coffee",
+	payeeVPA: "success@upi",
+	payeeName: "John Doe",
+	amount: "150.00",
+	currency: "INR",
+	transactionNote: "Coffee",
 });
 // result.qr      → SVG string
 // result.intent → upi://pay?... intent link

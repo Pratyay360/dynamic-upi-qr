@@ -1,6 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/Navigation.astro';
+import Navigation from "../components/Navigation.astro";
+import Layout from "../layouts/Layout.astro";
 
 const htmlSnippet = `<!DOCTYPE html>
 <html lang="en">
@@ -232,10 +232,10 @@ const htmlSnippet = `<!DOCTYPE html>
       submitBtn.textContent = 'Initializing WASM...';
 
       try {
-        const url = 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
-        const mod = await import(
-          /* @vite-ignore */ url
-        );
+        // globalThis lookup keeps the CDN specifier opaque to bundlers while
+        // still allowing an override at runtime.
+        const url = Reflect.get(globalThis, "__UPIQR_CDN_URL__") ?? 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
+        const mod = await import(/* @vite-ignore */ url);
         await mod.default(); // Init WASM
 
         const params: any = {

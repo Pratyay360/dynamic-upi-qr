@@ -14,7 +14,11 @@ let upiqrcodeLib = null;
 
 onMount(async () => {
 	try {
-		const url = "https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js";
+		// globalThis lookup keeps the CDN specifier opaque to bundlers while
+		// still allowing an override at runtime.
+		const url =
+			Reflect.get(globalThis, "__UPIQR_CDN_URL__") ??
+			"https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js";
 		const mod = await import(/* @vite-ignore */ url);
 		await mod.default(); // Initialize WASM
 		upiqrcodeLib = mod;

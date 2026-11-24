@@ -1,4 +1,5 @@
 ---
+
 title: "UPI QR Format"
 description: "How Dynamic UPI formats QR codes and deep links for payment apps."
 sidebar: { order: 3 }

@@ -1,4 +1,5 @@
 ---
+
 title: "Getting Started"
 description: "Learn how to use Dynamic UPI to generate instant payment QR codes."
 sidebar: { order: 1 }

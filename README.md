@@ -57,10 +57,10 @@ npm install upiqrcode
 const { generateUPIQR } = require("upiqrcode");
 
 const qr = generateUPIQR({
-  upiid: "username@paytm",
-  name: "John Doe",
-  money: "100",
-  note: "Coffee Payment",
+	upiid: "username@paytm",
+	name: "John Doe",
+	money: "100",
+	note: "Coffee Payment",
 });
 ```
 

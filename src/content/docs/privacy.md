@@ -1,4 +1,5 @@
 ---
+
 title: "Privacy"
 description: "Understand what data is collected and how it is handled."
 sidebar: { order: 4 }

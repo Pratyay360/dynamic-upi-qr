@@ -154,90 +154,95 @@ const libLoaded = ref(false);
 const upiqrcodeLib = ref(null);
 
 onMounted(async () => {
-  try {
-    const url = "https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js";
-    const mod = await import(/* @vite-ignore */ url);
-    await mod.default(); // Initialize WASM
-    upiqrcodeLib.value = mod;
-    libLoaded.value = true;
-  } catch (err) {
-    console.error("Failed to load upiqrcode WASM library from CDN", err);
-    error.value = "Failed to initialize UPI QR engine from CDN.";
-  }
+	try {
+		// globalThis lookup keeps the CDN specifier opaque to bundlers while
+		// still allowing an override at runtime.
+		const url =
+			Reflect.get(globalThis, "__UPIQR_CDN_URL__") ??
+			"https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js";
+		const mod = await import(/* @vite-ignore */ url);
+		await mod.default(); // Initialize WASM
+		upiqrcodeLib.value = mod;
+		libLoaded.value = true;
+	} catch (err) {
+		console.error("Failed to load upiqrcode WASM library from CDN", err);
+		error.value = "Failed to initialize UPI QR engine from CDN.";
+	}
 });
 
 const handleGenerate = async () => {
-  error.value = "";
-  result.value = null;
+	error.value = "";
+	result.value = null;
 
-  const trimmedVpa = vpa.value.trim();
-  const trimmedName = name.value.trim();
+	const trimmedVpa = vpa.value.trim();
+	const trimmedName = name.value.trim();
 
-  if (!trimmedVpa || trimmedVpa.length < 5 || !trimmedVpa.includes("@")) {
-    error.value = "UPI VPA is required and must be a valid handle (e.g. name@bank, min 5 chars)";
-    return;
-  }
-  if (!trimmedName || trimmedName.length < 4) {
-    error.value = "Payee Name is required and must be at least 4 characters";
-    return;
-  }
+	if (!trimmedVpa || trimmedVpa.length < 5 || !trimmedVpa.includes("@")) {
+		error.value =
+			"UPI VPA is required and must be a valid handle (e.g. name@bank, min 5 chars)";
+		return;
+	}
+	if (!trimmedName || trimmedName.length < 4) {
+		error.value = "Payee Name is required and must be at least 4 characters";
+		return;
+	}
 
-  if (amount.value) {
-    const numAmount = parseFloat(amount.value);
-    if (Number.isNaN(numAmount) || numAmount <= 0) {
-      error.value = "Amount must be a valid positive number";
-      return;
-    }
-  }
+	if (amount.value) {
+		const numAmount = parseFloat(amount.value);
+		if (Number.isNaN(numAmount) || numAmount <= 0) {
+			error.value = "Amount must be a valid positive number";
+			return;
+		}
+	}
 
-  if (!upiqrcodeLib.value) {
-    error.value = "UPI QR engine is still loading. Please try again.";
-    return;
-  }
+	if (!upiqrcodeLib.value) {
+		error.value = "UPI QR engine is still loading. Please try again.";
+		return;
+	}
 
-  loading.value = true;
-  try {
-    const params = {
-      payeeVPA: trimmedVpa,
-      payeeName: trimmedName,
-      currency: "INR",
-      transactionNote: note.value.trim() || "Payment",
-    };
+	loading.value = true;
+	try {
+		const params = {
+			payeeVPA: trimmedVpa,
+			payeeName: trimmedName,
+			currency: "INR",
+			transactionNote: note.value.trim() || "Payment",
+		};
 
-    if (amount.value.trim()) {
-      params.amount = parseFloat(amount.value).toFixed(2);
-    }
+		if (amount.value.trim()) {
+			params.amount = parseFloat(amount.value).toFixed(2);
+		}
 
-    const res = await upiqrcodeLib.value.upiqrcode(params);
-    if (res?.qr) {
-      result.value = res;
-    } else {
-      error.value = "Failed to generate QR code. Verify inputs.";
-    }
-  } catch (err) {
-    console.error(err);
-    error.value = err.message || "Error occurred during QR generation.";
-  } finally {
-    loading.value = false;
-  }
+		const res = await upiqrcodeLib.value.upiqrcode(params);
+		if (res?.qr) {
+			result.value = res;
+		} else {
+			error.value = "Failed to generate QR code. Verify inputs.";
+		}
+	} catch (err) {
+		console.error(err);
+		error.value = err.message || "Error occurred during QR generation.";
+	} finally {
+		loading.value = false;
+	}
 };
 
 const copyIntent = () => {
-  if (!result.value?.intent) return;
-  navigator.clipboard.writeText(result.value.intent);
-  copied.value = true;
-  setTimeout(() => (copied.value = false), 2000);
+	if (!result.value?.intent) return;
+	navigator.clipboard.writeText(result.value.intent);
+	copied.value = true;
+	setTimeout(() => (copied.value = false), 2000);
 };
 
 const downloadSvg = () => {
-  if (!result.value?.qr) return;
-  const blob = new Blob([result.value.qr], { type: "image/svg+xml" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `upi-qr-${vpa.value.replace("@", "-")}.svg`;
-  a.click();
-  URL.revokeObjectURL(url);
+	if (!result.value?.qr) return;
+	const blob = new Blob([result.value.qr], { type: "image/svg+xml" });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = `upi-qr-${vpa.value.replace("@", "-")}.svg`;
+	a.click();
+	URL.revokeObjectURL(url);
 };
 </script>
 

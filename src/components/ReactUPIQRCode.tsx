@@ -31,7 +31,11 @@ export default function ReactUPIQRCode() {
     let active = true;
     const initLib = async () => {
       try {
-        const url = "https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js";
+        // globalThis lookup keeps the CDN specifier opaque to bundlers while
+        // still allowing an override at runtime.
+        const url =
+          Reflect.get(globalThis, "__UPIQR_CDN_URL__") ??
+          "https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js";
         const mod = await import(/* @vite-ignore */ url);
         await mod.default(); // Initialize WASM
         if (active) {
@@ -54,8 +58,6 @@ export default function ReactUPIQRCode() {
     e.preventDefault();
     setError("");
     setResult(null);
-
-    // Frontend validations to avoid Rust panics/errors
     const trimmedVpa = vpa.trim();
     const trimmedName = name.trim();
     if (!trimmedVpa || trimmedVpa.length < 5 || !trimmedVpa.includes("@")) {
@@ -137,7 +139,10 @@ export default function ReactUPIQRCode() {
 
         <form onSubmit={handleGenerate} className="space-y-4">
           <div>
-            <label htmlFor="react-vpa" className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+            <label
+              htmlFor="react-vpa"
+              className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5"
+            >
               Payee UPI VPA <span className="text-stone-400 dark:text-stone-500">*</span>
             </label>
             <input
@@ -152,7 +157,10 @@ export default function ReactUPIQRCode() {
           </div>
 
           <div>
-            <label htmlFor="react-name" className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+            <label
+              htmlFor="react-name"
+              className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5"
+            >
               Payee Name <span className="text-stone-400 dark:text-stone-500">*</span>
             </label>
             <input
@@ -168,7 +176,10 @@ export default function ReactUPIQRCode() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="react-amount" className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+              <label
+                htmlFor="react-amount"
+                className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5"
+              >
                 Amount (INR) <span className="text-stone-400 dark:text-stone-500">(Optional)</span>
               </label>
               <input
@@ -183,7 +194,10 @@ export default function ReactUPIQRCode() {
             </div>
 
             <div>
-              <label htmlFor="react-note" className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+              <label
+                htmlFor="react-note"
+                className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5"
+              >
                 Note
               </label>
               <input

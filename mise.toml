@@ -1,12 +1,14 @@
 [tools]
 aube = "latest"
 biome = "latest"
+bun = "latest"
 node = "24"
+"npm:netlify-cli" = "latest"
 "npm:parcel" = "latest"
 vp = "latest"
 
 [tasks]
-build = "aube install && aube run build"
+build = "bun install && bun run build"
 lint = "biome check"
 
 [tasks.deploy]

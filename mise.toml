@@ -3,7 +3,6 @@ aube = "latest"
 biome = "latest"
 bun = "latest"
 node = "24"
-"npm:netlify-cli" = "latest"
 "npm:parcel" = "latest"
 vp = "latest"
 

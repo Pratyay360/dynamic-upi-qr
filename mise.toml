@@ -1,4 +1,5 @@
 [tools]
 biome = "latest"
-nub = { version = "latest", allow_builds = ["@nubjs/nub"] }
+node = "latest"
+nub = "latest"
 vp = "latest"

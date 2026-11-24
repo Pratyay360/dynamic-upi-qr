@@ -1,12 +1,15 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 
 interface Props {
 	title?: string;
 	description?: string;
 }
 
-const { title = 'Dynamic UPI', description = '' }: Props = Astro.props;
+const {
+	title = "Dynamic UPI",
+	description = "Dynamic UPI QR code generator",
+}: Props = Astro.props;
 ---
 <!doctype html>
 <html lang="en">

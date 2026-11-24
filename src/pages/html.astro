@@ -24,10 +24,10 @@ const htmlSnippet = `<!DOCTYPE html>
 
     document.getElementById('payForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       // 1. Initialize WASM Runtime
       await init();
-      
+
       // 2. Generate
       const result = await upiqrcode({
         payeeVPA: document.getElementById('vpa').value,
@@ -44,13 +44,13 @@ const htmlSnippet = `<!DOCTYPE html>
 </html>`;
 ---
 
-<Layout 
+<Layout
   title="Plain HTML Integration - UPI QR Code Demos"
   description="Learn how to generate dynamic UPI QR codes in plain HTML and vanilla JavaScript using upiqrcode.js via CDN loading."
 >
   <div class="min-h-screen bg-white dark:bg-stone-950 text-stone-850 dark:text-stone-200 flex flex-col">
     <Navigation />
-    
+
     <main class="grow max-w-7xl w-full mx-auto px-6 sm:px-8 py-12">
       <div class="mb-10 text-center md:text-left">
         <h1 class="text-3xl font-extrabold tracking-tight mb-2 text-stone-900 dark:text-stone-50">
@@ -70,7 +70,7 @@ const htmlSnippet = `<!DOCTYPE html>
 
           <form id="html-demo-form" class="space-y-4">
             <div>
-              <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+              <label for="html-vpa" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
                 Payee UPI VPA <span class="text-stone-400 dark:text-stone-500">*</span>
               </label>
               <input
@@ -83,7 +83,7 @@ const htmlSnippet = `<!DOCTYPE html>
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+              <label for="html-name" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
                 Payee Name <span class="text-stone-400 dark:text-stone-500">*</span>
               </label>
               <input
@@ -97,7 +97,7 @@ const htmlSnippet = `<!DOCTYPE html>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+                <label for="html-amount" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
                   Amount (INR) <span class="text-stone-400 dark:text-stone-500">(Optional)</span>
                 </label>
                 <input
@@ -110,7 +110,7 @@ const htmlSnippet = `<!DOCTYPE html>
               </div>
 
               <div>
-                <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+                <label for="html-note" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
                   Note
                 </label>
                 <input
@@ -182,8 +182,8 @@ const htmlSnippet = `<!DOCTYPE html>
         </div>
       </div>
     </main>
-    
-  
+
+
   </div>
 </Layout>
 
@@ -253,7 +253,7 @@ const htmlSnippet = `<!DOCTYPE html>
 
         if (res && res.qr) {
           qrContainer.innerHTML = res.qr;
-          
+
           // Style SVG width/height automatically
           const svgEl = qrContainer.querySelector('svg');
           if (svgEl) {

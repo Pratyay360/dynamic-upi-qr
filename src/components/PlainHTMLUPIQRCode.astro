@@ -13,7 +13,7 @@
 
   <form id="plain-html-form" class="space-y-4">
     <div>
-      <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+      <label for="plain-html-vpa" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
         Payee UPI VPA <span class="text-stone-400 dark:text-stone-500">*</span>
       </label>
       <input
@@ -26,7 +26,7 @@
     </div>
 
     <div>
-      <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+      <label for="plain-html-name" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
         Payee Name <span class="text-stone-400 dark:text-stone-500">*</span>
       </label>
       <input
@@ -40,7 +40,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+        <label for="plain-html-amount" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
           Amount (INR) <span class="text-stone-400 dark:text-stone-500">(Optional)</span>
         </label>
         <input
@@ -53,7 +53,7 @@
       </div>
 
       <div>
-        <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+        <label for="plain-html-note" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
           Note
         </label>
         <input
@@ -77,7 +77,7 @@
     </button>
   </form>
 
-  <div id="plain-html-result" class="hidden mt-8 pt-8 border-t border-stone-200 dark:border-stone-800 flex flex-col items-center">
+  <div id="plain-html-result" class="mt-8 pt-8 border-t border-stone-200 dark:border-stone-800 flex flex-col items-center">
     <div id="plain-html-qr-container" class="p-4 rounded-xl bg-white text-neutral-900 border border-stone-200 flex justify-center items-center shadow-sm mb-6 plain-html-qr-svg-wrapper">
     </div>
 

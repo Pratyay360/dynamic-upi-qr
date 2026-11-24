@@ -1,106 +1,105 @@
 <script>
-  import { onMount } from 'svelte';
+import { onMount } from "svelte";
 
-  let vpa = '';
-  let name = '';
-  let amount = '';
-  let note = 'Payment';
-  let result = null;
-  let loading = false;
-  let error = '';
-  let copied = false;
-  let libLoaded = false;
-  let upiqrcodeLib = null;
+let vpa = "";
+let name = "";
+let amount = "";
+let note = "Payment";
+let result = null;
+let loading = false;
+let error = "";
+let copied = false;
+let libLoaded = false;
+let upiqrcodeLib = null;
 
-  onMount(async () => {
-    try {
-      const url = 'https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js';
-      const mod = await import(
-        /* @vite-ignore */ url
-      );
-      await mod.default(); // Initialize WASM
-      upiqrcodeLib = mod;
-      libLoaded = true;
-    } catch (err) {
-      console.error('Failed to load upiqrcode WASM library from CDN', err);
-      error = 'Failed to initialize UPI QR engine from CDN.';
-    }
-  });
+onMount(async () => {
+	try {
+		const url = "https://cdn.jsdelivr.net/npm/upiqrcode@1.5.5/upiqrcode.js";
+		const mod = await import(/* @vite-ignore */ url);
+		await mod.default(); // Initialize WASM
+		upiqrcodeLib = mod;
+		libLoaded = true;
+	} catch (err) {
+		console.error("Failed to load upiqrcode WASM library from CDN", err);
+		error = "Failed to initialize UPI QR engine from CDN.";
+	}
+});
 
-  async function handleGenerate(e) {
-    e.preventDefault();
-    error = '';
-    result = null;
+async function handleGenerate(e) {
+	e.preventDefault();
+	error = "";
+	result = null;
 
-    const trimmedVpa = vpa.trim();
-    const trimmedName = name.trim();
+	const trimmedVpa = vpa.trim();
+	const trimmedName = name.trim();
 
-    if (!trimmedVpa || trimmedVpa.length < 5 || !trimmedVpa.includes('@')) {
-      error = 'UPI VPA is required and must be a valid handle (e.g. name@bank, min 5 chars)';
-      return;
-    }
-    if (!trimmedName || trimmedName.length < 4) {
-      error = 'Payee Name is required and must be at least 4 characters';
-      return;
-    }
+	if (!trimmedVpa || trimmedVpa.length < 5 || !trimmedVpa.includes("@")) {
+		error =
+			"UPI VPA is required and must be a valid handle (e.g. name@bank, min 5 chars)";
+		return;
+	}
+	if (!trimmedName || trimmedName.length < 4) {
+		error = "Payee Name is required and must be at least 4 characters";
+		return;
+	}
 
-    if (amount) {
-      const numAmount = parseFloat(amount);
-      if (isNaN(numAmount) || numAmount <= 0) {
-        error = 'Amount must be a valid positive number';
-        return;
-      }
-    }
+	if (amount) {
+		const numAmount = parseFloat(amount);
+		if (Number.isNaN(numAmount) || numAmount <= 0) {
+			error = "Amount must be a valid positive number";
+			return;
+		}
+	}
 
-    if (!upiqrcodeLib) {
-      error = 'UPI QR engine is still loading. Please try again.';
-      return;
-    }
+	if (!upiqrcodeLib) {
+		error = "UPI QR engine is still loading. Please try again.";
+		return;
+	}
 
-    loading = true;
-    try {
-      const params = {
-        payeeVPA: trimmedVpa,
-        payeeName: trimmedName,
-        currency: 'INR',
-        transactionNote: note.trim() || 'Payment',
-      };
+	loading = true;
+	try {
+		const params = {
+			payeeVPA: trimmedVpa,
+			payeeName: trimmedName,
+			currency: "INR",
+			transactionNote: note.trim() || "Payment",
+		};
 
-      if (amount.trim()) {
-        params.amount = parseFloat(amount).toFixed(2);
-      }
+		if (amount.trim()) {
+			params.amount = parseFloat(amount).toFixed(2);
+		}
 
-      const res = await upiqrcodeLib.upiqrcode(params);
-      if (res && res.qr) {
-        result = res;
-      } else {
-        error = 'Failed to generate QR code. Verify inputs.';
-      }
-    } catch (err) {
-      console.error(err);
-      error = err.message || 'Error occurred during QR generation.';
-    } finally {
-      loading = false;
-    }
-  }
+		const res = await upiqrcodeLib.upiqrcode(params);
+		if (res?.qr) {
+			result = res;
+		} else {
+			error = "Failed to generate QR code. Verify inputs.";
+		}
+	} catch (err) {
+		console.error(err);
+		error = err.message || "Error occurred during QR generation.";
+	} finally {
+		loading = false;
+	}
+}
 
-  function copyIntent() {
-    if (!result?.intent) return;
-    void navigator.clipboard.writeText(result.intent);
-    copied = true;
-    setTimeout(() => copied = false, 2000);
-  }
+function copyIntent() {
+	if (!result?.intent) return;
+	void navigator.clipboard.writeText(result.intent);
+	copied = true;
+	setTimeout(() => (copied = false), 2000);
+}
 
-  function downloadSvg() {
-    if (!result?.qr) return;
-    const blob = new Blob([result.qr], { type: 'image/svg+xml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `upi-qr-${vpa.replace('@', '-')}.svg`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+function downloadSvg() {
+	if (!result?.qr) return;
+	const blob = new Blob([result.qr], { type: "image/svg+xml" });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = `upi-qr-${vpa.replace("@", "-")}.svg`;
+	a.click();
+	URL.revokeObjectURL(url);
+}
 </script>
 
 <div class="w-full max-w-xl mx-auto my-6 p-8 rounded-2xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-100 shadow-sm transition-all duration-300">
@@ -110,10 +109,11 @@
 
   <form on:submit={handleGenerate} class="space-y-4">
     <div>
-      <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+      <label for="svelte-vpa" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
         Payee UPI VPA <span class="text-stone-400 dark:text-stone-500">*</span>
       </label>
       <input
+        id="svelte-vpa"
         type="text"
         required
         bind:value={vpa}
@@ -123,10 +123,11 @@
     </div>
 
     <div>
-      <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+      <label for="svelte-name" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
         Payee Name <span class="text-stone-400 dark:text-stone-500">*</span>
       </label>
       <input
+        id="svelte-name"
         type="text"
         required
         bind:value={name}
@@ -137,10 +138,11 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+        <label for="svelte-amount" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
           Amount (INR) <span class="text-stone-400 dark:text-stone-500">(Optional)</span>
         </label>
         <input
+          id="svelte-amount"
           type="number"
           step="0.01"
           bind:value={amount}
@@ -150,10 +152,11 @@
       </div>
 
       <div>
-        <label class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
+        <label for="svelte-note" class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
           Note
         </label>
         <input
+          id="svelte-note"
           type="text"
           bind:value={note}
           placeholder="e.g. Payment"

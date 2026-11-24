@@ -1,8 +1,7 @@
 ---
 title: "FAQ"
 description: "Frequently asked questions about Dynamic UPI."
-sidebar:
-  order: 4
+sidebar: { order: 4 }
 ---
 
 # FAQ

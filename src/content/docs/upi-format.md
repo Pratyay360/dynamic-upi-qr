@@ -1,8 +1,7 @@
 ---
 title: "UPI QR Format"
 description: "How Dynamic UPI formats QR codes and deep links for payment apps."
-sidebar:
-  order: 3
+sidebar: { order: 3 }
 ---
 
 # UPI QR Format
@@ -28,14 +27,14 @@ The generated intent link follows the UPI deep-link spec:
 upi://pay?pa=payeeVPA&pn=payeeName&am=amount&cu=currency&tn=transactionNote
 ```
 
-| Parameter | Description               | Required |
-| --------- | ------------------------- | -------- |
-| `pa`      | Payee VPA (UPI ID)        | ✅       |
-| `pn`      | Payee name                | ✅       |
-| `am`      | Amount                    | optional |
-| `cu`      | Currency (default INR)    | optional |
-| `tn`      | Transaction note          | optional |
-| `tr`      | Transaction reference ID  | optional |
+| Parameter | Description              | Required |
+| --------- | ------------------------ | -------- |
+| `pa`      | Payee VPA (UPI ID)       | ✅       |
+| `pn`      | Payee name               | ✅       |
+| `am`      | Amount                   | optional |
+| `cu`      | Currency (default INR)   | optional |
+| `tn`      | Transaction note         | optional |
+| `tr`      | Transaction reference ID | optional |
 
 ## QR Code
 

@@ -11,11 +11,13 @@
     <form @submit.prevent="handleGenerate" class="space-y-4">
       <div>
         <label
+          for="vue-vpa"
           class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5"
         >
           Payee UPI VPA <span class="text-stone-400 dark:text-stone-500">*</span>
         </label>
         <input
+          id="vue-vpa"
           type="text"
           required
           v-model="vpa"
@@ -26,11 +28,13 @@
 
       <div>
         <label
+          for="vue-name"
           class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5"
         >
           Payee Name <span class="text-stone-400 dark:text-stone-500">*</span>
         </label>
         <input
+          id="vue-name"
           type="text"
           required
           v-model="name"
@@ -42,11 +46,13 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label
+            for="vue-amount"
             class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5"
           >
             Amount (INR) <span class="text-stone-400 dark:text-stone-500">(Optional)</span>
           </label>
           <input
+            id="vue-amount"
             type="number"
             step="0.01"
             v-model="amount"
@@ -57,11 +63,13 @@
 
         <div>
           <label
+            for="vue-note"
             class="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5"
           >
             Note
           </label>
           <input
+            id="vue-note"
             type="text"
             v-model="note"
             placeholder="e.g. Payment"
@@ -132,7 +140,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 const vpa = ref("");
 const name = ref("");
@@ -176,7 +184,7 @@ const handleGenerate = async () => {
 
   if (amount.value) {
     const numAmount = parseFloat(amount.value);
-    if (isNaN(numAmount) || numAmount <= 0) {
+    if (Number.isNaN(numAmount) || numAmount <= 0) {
       error.value = "Amount must be a valid positive number";
       return;
     }
@@ -201,7 +209,7 @@ const handleGenerate = async () => {
     }
 
     const res = await upiqrcodeLib.value.upiqrcode(params);
-    if (res && res.qr) {
+    if (res?.qr) {
       result.value = res;
     } else {
       error.value = "Failed to generate QR code. Verify inputs.";

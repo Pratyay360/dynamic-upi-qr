@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "preview": "astro preview",
     "astro": "astro",
-    "build": "astro build && cd dist && parcel build \"**/*.html\" --dist-dir ."
+    "build": "astro build && cd dist && bunx parcel build \"**/*.html\" --dist-dir ."
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",

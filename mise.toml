@@ -1,14 +1,12 @@
 [tools]
 aube = "latest"
 biome = "latest"
-bun = "latest"
 node = "24"
 "npm:parcel" = "latest"
-nub = "latest"
 vp = "latest"
 
 [tasks]
-build = "bun run build"
+build = "aube install && aube run build"
 lint = "biome check"
 
 [tasks.deploy]

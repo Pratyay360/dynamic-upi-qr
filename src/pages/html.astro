@@ -298,7 +298,12 @@ const htmlSnippet = `<!DOCTYPE html>
     });
   });
 </script>
-
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-MDFBXSBD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
 <style>
   :global(.html-qr-svg-wrapper svg) {
     width: 200px !important;
